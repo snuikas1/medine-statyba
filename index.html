@@ -7,7 +7,7 @@
 <meta name="description" content="Medinė statyba Alytaus rajone nuo 2009 metų: mediniai namai ir priestatai, pirtys, pavėsinės, stogai ir terasos. Ūtos k., Pivašiūnų sen. Tel. +370 698 55940.">
 <!-- Unsolicited demo: the owner has not agreed to this page existing, so it stays out of search. -->
 <meta name="robots" content="noindex, nofollow">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-FgTj8XXTgTBinMX1VHgK0FsHNAi2sp7lJjYpt+6i2go='; style-src 'self'; font-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#1B1E19">
@@ -16,6 +16,9 @@
 <link rel="preload" href="fonts/familjen-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/familjen-grotesk-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
+<!-- Runs before first paint so no rule is ever hidden on a machine that asks for less
+     motion. Allowed by the CSP above by hash; edit the script and the hash must change. -->
+<script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("js")</script>
 </head>
 <body>
 
@@ -103,6 +106,9 @@
   </div>
 </footer>
 
-<script src="main.js"></script>
+<!-- Deferred, both of them: the name has to paint before a 137 KB animation library is
+     anywhere near the critical path. -->
+<script src="vendor/motion.js" defer></script>
+<script src="main.js" defer></script>
 </body>
 </html>
