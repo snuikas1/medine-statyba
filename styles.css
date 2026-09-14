@@ -1,0 +1,299 @@
+/* MEDINĖ STATYBA, UAB. A confirmation page: the name, the number, and nothing that
+   competes with them. One typeface, one warm colour, contrast carried by value. */
+
+@font-face {
+  font-family: "Familjen Grotesk";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(fonts/familjen-grotesk-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Familjen Grotesk";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(fonts/familjen-grotesk-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* Primitives. Dzūkija in overcast light: forest floor, bark, planed pine. */
+  --samana:   #1B1E19;
+  --zieve:    #262A23;
+  --brekst:   #3A3F36;
+  --obliuota: #E8E4DA;
+  --migla:    #9AA093;
+  --pusis:    #C8A06B;
+
+  /* Semantic. Everything below this line references these, never the primitives. */
+  --ground:    var(--samana);
+  --surface:   var(--zieve);
+  --rule:      var(--brekst);
+  --ink:       var(--obliuota);
+  --ink-quiet: var(--migla);
+  --warm:      var(--pusis);
+  --warm-lift: color-mix(in srgb, var(--pusis) 86%, var(--obliuota));
+  --on-warm:   var(--samana);
+
+  --face: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+
+  /* Fluid throughout, no stepped sizes anywhere. The name-to-number ramp holds at
+     roughly 0.54 at every width, so the hierarchy reads the same on a phone. */
+  --t-name:  clamp(3.875rem, 15.5vw, 7rem);
+  --t-phone: clamp(2.125rem, 8.6vw, 3.75rem);
+  --t-h2:    clamp(1.625rem, 1.4rem + 0.9vw, 2.125rem);
+  --t-hero-lead: clamp(1.1875rem, 1.05rem + 0.6vw, 1.4375rem);
+  --t-lead:  clamp(1.0625rem, 0.95rem + 0.5vw, 1.25rem);
+  --t-item:  clamp(1.125rem, 1.075rem + 0.2vw, 1.25rem);
+  --t-body:  1.0625rem;
+  --t-small: 0.875rem;
+
+  /* Measured, not guessed: the M of "Medinė" carries a left side bearing of 0.0662em and
+     the S of the sentence below it 0.0333em, so at 112px over 20px the name sits 6.8px
+     further in than the text. Pulled back until the two ink edges are one line, within
+     0.3px at every width. See checks.optical in test/report.json. */
+  --optical-left: -0.058em;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  --shell: 62rem;
+  --gutter: clamp(20px, 5vw, 56px);
+
+  --dur-press: 150ms;
+  --dur-hover: 240ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  background: var(--ground);
+  /* In CSS as well as the meta tag: the meta sets the used scheme but leaves the
+     computed property at normal, so the scrollbar stays light without this. */
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--face);
+  font-size: var(--t-body);
+  font-weight: 400;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, p, dl, dd, ol { margin: 0; }
+ol { padding: 0; list-style: none; }
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--warm);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.shell {
+  max-width: var(--shell);
+  margin-inline: auto;
+}
+
+/* Hero. Name, one sentence, number, one sentence. Nothing else is in the first screen. */
+.hero {
+  padding: clamp(4.5rem, 11vh, 9rem) var(--gutter) clamp(2.5rem, 5vh, 3.5rem);
+}
+
+.name {
+  margin-left: var(--optical-left);
+  font-size: var(--t-name);
+  font-weight: 600;
+  line-height: 0.94;
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+
+.lead {
+  /* 28ch is measured, not picked: it is wider than the first sentence and narrower than
+     that sentence plus the next word, so the line always breaks on the full stop. The two
+     nbsp in the markup hold "nuo 2009" and "Ūtos kaime" together, which puts the other two
+     breaks on phrase boundaries as well. */
+  max-width: 28ch;
+  margin-top: clamp(var(--space-5), 3.5vw, var(--space-7));
+  font-size: var(--t-hero-lead);
+  line-height: 1.45;
+  color: var(--ink-quiet);
+  text-wrap: pretty;
+}
+
+.call { margin-top: clamp(var(--space-6), 5vw, 3.75rem); }
+
+.phone {
+  display: inline-block;
+  font-size: var(--t-phone);
+  font-weight: 600;
+  /* Leading, not padding: it lifts the rule clear of the descenders and takes the hit
+     area past 44px on a phone without moving the number. */
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  font-variant-numeric: tabular-nums;
+  color: var(--warm);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color var(--dur-hover) var(--ease),
+              border-color var(--dur-hover) var(--ease),
+              transform var(--dur-press) var(--ease);
+}
+.phone:hover { color: var(--warm-lift); border-bottom-color: var(--warm-lift); }
+.phone.is-pressed { transform: translateY(2px); }
+
+.call-note {
+  margin-top: var(--space-4);
+  color: var(--ink-quiet);
+}
+
+/* Sections. A hairline over each one, drawn to the text column rather than the page
+   edge, so the left edge of the rule and the left edge of the type are the same line. */
+.band { padding-inline: var(--gutter); }
+.band > .shell {
+  border-top: 1px solid var(--rule);
+  padding-block: clamp(2.75rem, 6vw, 4.5rem);
+}
+.band-surface {
+  background: var(--surface);
+  padding-block: 1px;          /* contains the child's margins, keeps the band tight */
+}
+.band-surface > .shell { border-top: 0; }
+
+/* A section start has to be unmistakable against a row start directly under it, so the
+   step is made twice over: 1.7x the size of a row label, and a weight heavier. */
+h2 {
+  font-size: var(--t-h2);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.018em;
+}
+
+.section-lead {
+  max-width: 44ch;
+  margin-top: var(--space-3);
+  font-size: var(--t-lead);
+  color: var(--ink-quiet);
+  text-wrap: pretty;
+}
+
+.list { margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+
+.row {
+  display: grid;
+  gap: var(--space-3) 2.5rem;
+  padding-block: clamp(var(--space-5), 2.6vw, 1.75rem);
+  border-top: 1px solid var(--rule);
+}
+.row:first-child { border-top: 0; padding-top: 0; }
+
+.row-head {
+  display: flex;
+  gap: var(--space-3);
+  font-size: var(--t-item);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* The steps are genuinely a sequence, so they are numbered; the numeral is set as a
+   numeral and given no decoration at all. */
+.num {
+  flex: none;
+  min-width: 1.1ch;
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+  color: var(--ink-quiet);
+}
+
+.desc {
+  max-width: 58ch;
+  color: var(--ink-quiet);
+  text-wrap: pretty;
+}
+
+@media (min-width: 820px) {
+  .row { grid-template-columns: minmax(0, 19rem) minmax(0, 1fr); }
+}
+
+.prose {
+  max-width: 56ch;
+  margin-top: clamp(var(--space-5), 3vw, var(--space-6));
+  font-size: var(--t-lead);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+/* Contacts sit on the raised surface: one tonal step, and the number becomes a thing
+   to press rather than a thing to read. */
+.contact-call { margin-top: clamp(var(--space-5), 3vw, var(--space-6)); }
+
+.button {
+  display: inline-block;
+  padding: 0.85rem 1.4rem;
+  border-radius: 2px;
+  background: var(--warm);
+  color: var(--on-warm);
+  font-size: var(--t-item);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.006em;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  transition: background-color var(--dur-hover) var(--ease),
+              transform var(--dur-press) var(--ease);
+}
+.button:hover { background: var(--warm-lift); }
+.button.is-pressed { transform: translateY(2px); }
+
+.contact-note {
+  max-width: 48ch;
+  margin-top: var(--space-5);
+  color: var(--ink-quiet);
+  text-wrap: pretty;
+}
+.contact-addr {
+  margin-top: var(--space-4);
+  color: var(--ink-quiet);
+}
+
+.foot {
+  padding: clamp(2.5rem, 5vw, 3.5rem) var(--gutter) clamp(3rem, 6vw, 4rem);
+}
+.foot .shell { border-top: 1px solid var(--rule); padding-top: clamp(2rem, 4vw, 2.5rem); }
+.foot p {
+  font-size: var(--t-small);
+  line-height: 1.65;
+  color: var(--ink-quiet);
+  text-wrap: pretty;
+}
+.foot p:first-child { color: var(--ink); }
+.foot p:nth-child(4) { margin-top: var(--space-4); }
+
+@media (max-width: 560px) {
+  .button { padding: 1rem 1.5rem; }   /* larger target where the page is actually used */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .phone, .button { transition: none; }
+  .phone.is-pressed, .button.is-pressed { transform: none; }
+}

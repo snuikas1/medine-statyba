@@ -1,0 +1,6 @@
+# Internal only — these hold the unconfirmed assumptions, the design reasoning
+# and the test harness. The repo is public; they are not for the client to read.
+README.md
+DESIGN-NOTES.md
+test/
+.DS_Store
